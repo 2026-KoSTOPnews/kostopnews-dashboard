@@ -5,9 +5,9 @@ import streamlit as st
 from api import get_companies
 from api import get_company_sentiment
 from api import get_company_keywords
-from dashboard.components.sentiment import render_sentiment_chart
-from dashboard.components.news import render_news
-from dashboard.components.keywords import render_keywords_chart
+from components.sentiment import render_sentiment_chart
+from components.news import render_news
+from components.keywords import render_keywords_chart
 
 st.set_page_config(
     page_title="News Analysis",
