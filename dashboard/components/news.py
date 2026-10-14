@@ -1,6 +1,6 @@
 import streamlit as st
 
-from dashboard.api import get_news_by_date
+from api import get_news_by_date
 
 def render_news(company_id: int, selected_date, page_size: int = 5):
     st.html(
