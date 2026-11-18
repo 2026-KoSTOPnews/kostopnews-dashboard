@@ -5,7 +5,7 @@ def render_keywords_chart(title: str, keywords: list[dict]):
     st.html(
         f"""
         <div style="
-            font-size: 1.7rem;
+            font-size: 1.5rem;
             font-weight: 700;
             line-height: 1.3;
             margin-top: 0.5rem;

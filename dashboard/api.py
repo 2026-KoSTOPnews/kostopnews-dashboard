@@ -3,11 +3,13 @@ import streamlit as st
 
 import requests
 
-API_URL = (
-    st.secrets.get("FASTAPI_URL", "")
-    if hasattr(st, "secrets")
-    else ""
-) or os.getenv("FASTAPI_URL", "")
+API_URL = "http://localhost:8000"
+
+# API_URL = (
+#     st.secrets.get("FASTAPI_URL", "")
+#     if hasattr(st, "secrets")
+#     else ""
+# ) or os.getenv("FASTAPI_URL", "")
 
 def get_companies():
     response = requests.get(f"{API_URL}/api/companies")
@@ -41,6 +43,19 @@ def get_news_by_date(company_id: int, target_date, page: int = 1, size: int = 5)
             "target_date": target_date.isoformat(),
             "page": page,
             "size": size,
+        },
+    )
+    response.raise_for_status()
+    return response.json()
+
+def get_company_word_cloud(company_id: int, target_date, period_type: str = "daily", text_type: str = "title", limit: int = 100):
+    response = requests.get(
+        f"{API_URL}/api/companies/{company_id}/word-cloud",
+        params={
+            "target_date": target_date.isoformat(),
+            "period_type": period_type,
+            "text_type": text_type,
+            "limit": limit,
         },
     )
     response.raise_for_status()
