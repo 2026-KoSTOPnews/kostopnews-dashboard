@@ -3,13 +3,11 @@ import streamlit as st
 
 import requests
 
-API_URL = "http://localhost:8000"
-
-# API_URL = (
-#     st.secrets.get("FASTAPI_URL", "")
-#     if hasattr(st, "secrets")
-#     else ""
-# ) or os.getenv("FASTAPI_URL", "")
+API_URL = (
+    st.secrets.get("FASTAPI_URL", "")
+    if hasattr(st, "secrets")
+    else ""
+) or os.getenv("FASTAPI_URL", "")
 
 def get_companies():
     response = requests.get(f"{API_URL}/api/companies")
