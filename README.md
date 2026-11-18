@@ -86,7 +86,7 @@ Streamlit을 활용해 기업과 날짜별 뉴스 분석 결과를 확인할 수
 ## 📂 Project Structure
 
 ```text
-.
+kostopnews-dashboard/
 ├── dashboard/
 │   ├── app.py
 │   ├── api.py
