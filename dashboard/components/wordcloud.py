@@ -8,7 +8,7 @@ import streamlit as st
 FONT_PATH = (
     Path(__file__).resolve().parent.parent
     / "fonts"
-    / "NanumGothic.ttf"
+    / "SDSamliphopangcheTTFBasic.ttf"
 )
 
 def render_word_cloud(words: list[dict]):
