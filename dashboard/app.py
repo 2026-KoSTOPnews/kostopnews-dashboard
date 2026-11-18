@@ -1,13 +1,16 @@
-from datetime import date
-
 import streamlit as st
 
-from api import get_companies
-from api import get_company_sentiment
-from api import get_company_keywords
+from api import get_companies, get_company_sentiment, get_company_keywords, get_company_word_cloud
+
+from components.company_selector import render_company_selector
 from components.sentiment import render_sentiment_chart
 from components.news import render_news
 from components.keywords import render_keywords_chart
+from components.wordcloud import render_word_cloud
+from components.wordcloud_section import render_wordcloud_section
+from components.analysis_section import render_sentiment_section
+from components.news_section import render_news_section
+from components.date_selector import render_date_selector
 
 st.set_page_config(
     page_title="News Analysis",
@@ -18,78 +21,55 @@ st.set_page_config(
 st.html(
     """
     <div style="
-        font-size: 3rem;
+        font-size: 2.5rem;
         font-weight: 700;
         line-height: 1.5;
         margin-bottom: 1.5rem;
     ">
-        📰 뉴스 분석 대시보드
+        📰 KoSTOPnews | 기업별 뉴스 분석
     </div>
     """
 )
 
+# --------------------------------------------------
+# 기업 선택
+# --------------------------------------------------
 companies = get_companies()
+company = render_company_selector(companies)
 
-if not companies:
-    st.warning("등록된 기업이 없습니다.")
-    st.stop()
+st.write("")
 
-company = st.selectbox(
-    "기업을 선택하세요",
-    companies,
-    format_func=lambda company: company["name"],
-)
+# --------------------------------------------------
+# 날짜 선택
+# --------------------------------------------------
+selected_date = render_date_selector()
 
-# 감성 분석
-selected_date = st.date_input(
-    "조회 날짜",
-    value=date.today(),
-)
-
-sentiment = get_company_sentiment(company["id"], selected_date)
-keywords = get_company_keywords(company["id"], selected_date)
-
-st.html(
-    """
-    <div style="margin-bottom: 2rem;"></div>
-    """
-)
-
-tab_daily, tab_weekly, tab_monthly = st.tabs(["일간 분석", "주간 분석", "월간 분석"])
-
-with tab_daily:
-    render_sentiment_chart(
-        "일간 감성 분석",
-        sentiment["daily"],
-    )
-    render_keywords_chart(
-        "일간 주요 키워드",
-        keywords["daily"]["keywords"],
-    )
-
-with tab_weekly:
-    render_sentiment_chart(
-        "주간 감성 분석",
-        sentiment["weekly"],
-    )
-    render_keywords_chart(
-        "주간 주요 키워드",
-        keywords["weekly"]["keywords"],
-    )
-
-with tab_monthly:
-    render_sentiment_chart(
-        "월간 감성 분석",
-        sentiment["monthly"],
-    )
-    render_keywords_chart(
-        "월간 주요 키워드",
-        keywords["monthly"]["keywords"],
-    )
-
-# 뉴스
+st.write("")
 st.divider()
-render_news(
-    company["id"],
+
+# --------------------------------------------------
+# 기사 분석 결과
+# --------------------------------------------------
+render_sentiment_section(
     selected_date,
+    company,
+    get_company_sentiment,
+    get_company_keywords,
+    get_company_word_cloud,
+    render_wordcloud_section,
+    render_sentiment_chart,
+    render_keywords_chart,
+    render_word_cloud,
+)
+
+st.write("")
+st.divider()
+
+# --------------------------------------------------
+# 뉴스
+# --------------------------------------------------
+render_news_section(
+    selected_date,
+    company,
+    render_news,
 )

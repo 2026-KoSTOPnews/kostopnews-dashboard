@@ -3,25 +3,12 @@ import streamlit as st
 from api import get_news_by_date
 
 def render_news(company_id: int, selected_date, page_size: int = 5):
-    st.html(
-        """
-        <div style="
-            font-size: 1.7rem;
-            font-weight: 700;
-            line-height: 1.3;
-            margin-bottom: 1rem;
-        ">
-            📰 뉴스
-        </div>
-        """
-    )
-
     if (
         st.session_state.get("news_company_id") != company_id
-        or st.session_state.get("news_date") != selected_date
+        or st.session_state.get("news_selected_date") != selected_date
     ):
         st.session_state.news_company_id = company_id
-        st.session_state.news_date = selected_date
+        st.session_state.news_selected_date = selected_date
         st.session_state.news_page = 1
         st.session_state.news_list = []
         st.session_state.news_has_next = False

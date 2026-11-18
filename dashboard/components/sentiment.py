@@ -6,7 +6,7 @@ def render_sentiment_chart(title: str, data: list[dict]):
     st.html(
         f"""
         <div style="
-            font-size: 1.7rem;
+            font-size: 1.5rem;
             font-weight: 700;
             line-height: 1.3;
             margin-top: 0.5rem;
@@ -22,7 +22,14 @@ def render_sentiment_chart(title: str, data: list[dict]):
 
     df = pd.DataFrame(data)
 
-    df["period_start"] = pd.to_datetime(df["period_start"])
+    df["period_start"] = pd.to_datetime(
+        df["period_start"],
+        errors="coerce"
+    )
+
+    # 날짜 변환에 실패한 행 제거
+    df = df.dropna(subset=["period_start"])
+
     df = df.sort_values("period_start").reset_index(drop=True)
 
     # 데이터가 있는 순서대로 X축을 균등하게 배치
